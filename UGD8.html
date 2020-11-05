@@ -4,29 +4,82 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>UGD 8</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <script src="vue.js"></script>
     </head>
     
     <body>
         <div id="app">
-            <div>
-                <input v-model.angka="angka" type="number" placeholder="Tebak angka berapa???" />
+            <div class="card" style="text-align: center">
+                <h5 class="card-header" >Tebak Angka</h5>
+                <div class="card-body">
+                    <input type="number" class="form-control" v-model="tebakan" :disabled="isDisabled" placeholder="Masukkan angka tebakan mu !!"/><br>
+                    <button class="btn btn-primary btn-sm" @click="tebak" :disabled="isDisabled">Tebak</button><br>
+    
+                    Kesempatan : {{ kesempatan }}
+                </div>
             </div>
-	        <button @click="angka">Click Me</button>
-
-        </div>     
+    
+            <div class="text-center" v-show="benar">
+                <p>YEAYYY!!! SELAMAT, KAMU BENAR!! </p> 
+                <button class="btn btn-primary" @click="mainlagi" >main lagi</button>
+            </div>
+            <div class="text-center" v-show="kalah">
+                <p>YAHHH SAYANG SEKALI KAMU KALAH :(  </p> 
+                <p>Jawaban Yang Benar: {{ angka }}</p>
+                <button class="btn btn-primary" @click="mainlagi" >main lagi</button>
+            </div>
+            <div class="text-center" v-show="salah">
+                <p>Yokkk Coba Lagi.. </p> 
+                <button class="btn btn-warning" @click="cobalagi" >Coba lagi</button>
+            </div>
+            <footer class="text-center mt-5">
+                {{ `${mhs.nama} | ${mhs.npm} | ${mhs.kelas}` }}
+                
+            </footer>
+        </div>
     </body>
     <script>
         new Vue({
             el: "#app",
             data: {
-                angka: "",
-            },
-            methods: {
-                randomNumber : function(){
-                this.angka = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+                angka: Math.floor(Math.random() * 10)+1,
+                tebakan:null,
+                kesempatan:3,
+                salah:undefined,
+                benar:undefined,
+                kalah:undefined,
+                isDisabled:false,
+                mhs: {
+                    nama:'Angela Liling Datu',
+                    npm: '170709563',
+                    kelas: 'Kelas E',
                 },
             },
+            methods: {
+               tebak(){
+                console.log(this.angka);
+                if(this.tebakan == this.angka){
+                    this.benar = 1;
+                }else {
+                        this.salah =1;
+                        this.isDisabled = true;
+                        this.kesempatan--;
+                        if(this.kesempatan==0){
+                            this.kalah=1;
+                            this.salah = undefined;
+                        }
+                }  
+               },
+               cobalagi(){
+                    this.isDisabled = false;
+                    this.salah = undefined;
+               },
+               mainlagi(){
+                   location.reload();
+               }
+            },
+    
         });
     </script>
 </html>
